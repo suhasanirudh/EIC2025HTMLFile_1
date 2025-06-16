@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ESP8266 Sensor Dashboard</title>
+
+  <!-- Firebase Scripts -->
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-database.js"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet" />
+
+  <style>
+    /* Base */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: linear-gradient(135deg, #f0f2f5, #e0e7ff);
+      color: #222;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 30px;
+      color: #333;
+    }
+
+    .dashboard {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+      width: 100%;
+      max-width: 800px;
+    }
+
+    .card {
+      background: #ffffff;
+      border-radius: 16px;
+      padding: 30px 20px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    }
+
+    .label {
+      font-size: 1rem;
+      color: #666;
+      margin-bottom: 8px;
+    }
+
+    .value {
+      font-size: 1.8rem;
+      font-weight: 600;
+      color: #1a1a1a;
+    }
+
+    .icon {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    footer {
+      margin-top: 40px;
+      font-size: 0.9rem;
+      color: #888;
+    }
+  </style>
+</head>
+<body>
+
+  <h1>🌐 ESP8266 Live Sensor Dashboard</h1>
+
+  <div class="dashboard">
+    <div class="card">
+      <div class="icon">🌧️</div>
+      <div class="label">Rain Status</div>
+      <div class="value" id="rain">Loading...</div>
+    </div>
+    <div class="card">
+      <div class="icon">⚡</div>
+      <div class="label">Current</div>
+      <div class="value" id="current">Loading...</div>
+    </div>
+  </div>
+
+  <footer>Powered by Firebase + ESP8266</footer>
+
+  <script>
+    // Firebase config
+    var firebaseConfig = {
+      apiKey: "AIzaSyB3Hscr0saywhju448MI6KOU7p51k-PQMc",
+      authDomain: "skynergy-52256.firebaseapp.com",
+      databaseURL: "https://skynergy-52256-default-rtdb.asia-southeast1.firebasedatabase.app",
+      projectId: "skynergy-52256",
+    };
+
+    firebase.initializeApp(firebaseConfig);
+    var db = firebase.database();
+
+    // Real-time listeners
+    db.ref("/rain").on("value", function(snapshot) { // 'rainStatus is the 'key' in key-value pair in firebase
+      document.getElementById("rain").innerText = snapshot.val();
+    });
+
+    db.ref("/cur").on("value", function(snapshot) {
+      document.getElementById("current").innerText = snapshot.val();
+    });
+
+
+  </script>
+</body>
+</html>
